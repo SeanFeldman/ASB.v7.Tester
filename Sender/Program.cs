@@ -25,11 +25,16 @@
             configuration.EnableInstallers();
             configuration.UseSerialization<JsonSerializer>();
             configuration.UsePersistence<InMemoryPersistence>();
-            //configuration.Routing().UnicastRoutingTable.AddStatic(typeof(TestCommand), new EndpointName("Receiver"));
+
             configuration.SendFailedMessagesTo("error");
             configuration.UseTransport<AzureServiceBusTransport>()
                 .UseDefaultTopology()
                 .ConnectionString(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString"));
+
+            // define routing (what used to be message endpoint mapping)
+            var endpointName = new EndpointName("Receiver");
+            configuration.Routing().UnicastRoutingTable.AddStatic(typeof(TestCommand), endpointName);
+            configuration.Routing().EndpointInstances.AddStatic(endpointName, new EndpointInstanceName(endpointName, null, null));
 
             var endpoint = await Endpoint.Start(configuration);
             var context = endpoint.CreateBusContext();
@@ -44,21 +49,21 @@
         }
     }
 
-    public class MapMessages : IProvideConfiguration<UnicastBusConfig>
-    {
-        public UnicastBusConfig GetConfiguration()
-        {
-            return new UnicastBusConfig
-            {
-                MessageEndpointMappings = new MessageEndpointMappingCollection
-                {
-                    new MessageEndpointMapping
-                    {
-                        Endpoint = "Receiver",
-                        AssemblyName = "Messages"
-                    }
-                }
-            };
-        }
-    }
+//    public class MapMessages : IProvideConfiguration<UnicastBusConfig>
+//    {
+//        public UnicastBusConfig GetConfiguration()
+//        {
+//            return new UnicastBusConfig
+//            {
+//                MessageEndpointMappings = new MessageEndpointMappingCollection
+//                {
+//                    new MessageEndpointMapping
+//                    {
+//                        Endpoint = "Receiver",
+//                        AssemblyName = "Messages"
+//                    }
+//                }
+//            };
+//        }
+//    }
 }
