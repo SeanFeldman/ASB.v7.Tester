@@ -1,11 +1,11 @@
-﻿namespace Sender
+﻿using NServiceBus.Routing;
+
+namespace Sender
 {
     using System;
     using System.Threading.Tasks;
     using Messages;
     using NServiceBus;
-    using NServiceBus.Config;
-    using NServiceBus.Config.ConfigurationSource;
     using NServiceBus.Logging;
 
     class Program
@@ -27,17 +27,20 @@
             configuration.UsePersistence<InMemoryPersistence>();
 
             configuration.SendFailedMessagesTo("error");
-            configuration.UseTransport<AzureServiceBusTransport>()
-                .UseDefaultTopology()
-                .ConnectionString(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString"));
+           
+            var transportConfiguration = configuration.UseTransport<AzureServiceBusTransport>();
+
+            transportConfiguration.ConnectionString(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString"));
+
 
             // define routing (what used to be message endpoint mapping)
             var endpointName = new EndpointName("Receiver");
-            configuration.Routing().UnicastRoutingTable.AddStatic(typeof(TestCommand), endpointName);
-            configuration.Routing().EndpointInstances.AddStatic(endpointName, new EndpointInstanceName(endpointName, null, null));
+           // configuration.Routing().SetMessageDistributionStrategy(new SingleInstanceRoundRobinDistributionStrategy(), t => true);
+            configuration.Routing().UnicastRoutingTable.RouteToEndpoint(typeof(TestCommand), endpointName);
+            configuration.Routing().EndpointInstances.AddStatic(endpointName, new EndpointInstance(endpointName, null, null));
 
             var endpoint = await Endpoint.Start(configuration);
-            var context = endpoint.CreateBusContext();
+            var context = endpoint.CreateBusSession();
 
             Console.WriteLine("Press ESC to exit, any other key to send a message");
             Console.WriteLine("Press any other key to send a message");
