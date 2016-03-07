@@ -41,8 +41,9 @@
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.Azure.Transports.WindowsAzureServiceBus">
-      <HintPath>..\..\asb\src\binaries\NServiceBus.Azure.Transports.WindowsAzureServiceBus.dll</HintPath>
+    <Reference Include="NServiceBus.Azure.Transports.WindowsAzureServiceBus, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Azure.Transports.WindowsAzureServiceBus.7.0.0-unstable0438\lib\net452\NServiceBus.Azure.Transports.WindowsAzureServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.6.0.0-unstable1335\lib\net452\NServiceBus.Core.dll</HintPath>
