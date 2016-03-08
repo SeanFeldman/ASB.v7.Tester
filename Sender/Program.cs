@@ -20,7 +20,7 @@ namespace Sender
             var factory = LogManager.Use<DefaultFactory>();
             factory.Level(LogLevel.Debug);
 
-            var configuration = new BusConfiguration();
+            var configuration = new EndpointConfiguration();
             configuration.EndpointName("Sender");
             configuration.EnableInstallers();
             configuration.UseSerialization<JsonSerializer>();
@@ -40,33 +40,14 @@ namespace Sender
             configuration.Routing().EndpointInstances.AddStatic(endpointName, new EndpointInstance(endpointName, null, null));
 
             var endpoint = await Endpoint.Start(configuration);
-            var context = endpoint.CreateBusSession();
 
             Console.WriteLine("Press ESC to exit, any other key to send a message");
             Console.WriteLine("Press any other key to send a message");
             while (Console.ReadKey().Key != ConsoleKey.Escape)
             {
-                await context.Send<TestCommand>(m => m.Data = "Testing ASB send");
+                await endpoint.Send<TestCommand>(m => m.Data = "Testing ASB send");
                 Console.WriteLine("message sent");
             }
         }
     }
-
-//    public class MapMessages : IProvideConfiguration<UnicastBusConfig>
-//    {
-//        public UnicastBusConfig GetConfiguration()
-//        {
-//            return new UnicastBusConfig
-//            {
-//                MessageEndpointMappings = new MessageEndpointMappingCollection
-//                {
-//                    new MessageEndpointMapping
-//                    {
-//                        Endpoint = "Receiver",
-//                        AssemblyName = "Messages"
-//                    }
-//                }
-//            };
-//        }
-//    }
 }
