@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Messages;
+// ReSharper disable once RedundantUsingDirective
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using NServiceBus;
@@ -76,17 +77,16 @@ class Program
         var topologySettings = transportConfiguration.UseTopology<StandardTopology>();
         //topologySettings.Connectivity() make sure these do not popup in intellisense
 
-        //        topologySettings.Addressing().Composition().UseStrategy<FlatCompositionStrategy>(); //turn into topologySettings.Addressing.UseCompositionStrategy<FlatCompositionStrategy>()
-        //        topologySettings.Addressing().Individualization().UseStrategy<CoreIndividualizationStrategy>(); // same as composition
         //        topologySettings.Addressing().NamespacePartitioning().UseStrategy<ShardedNamespacePartitioningStrategy>();
         //        topologySettings.Addressing().NamespacePartitioning().AddNamespace("fallback", "sb://connection.string");
-
+        //        topologySettings.Addressing().Composition().UseStrategy<FlatCompositionStrategy>(); //turn into topologySettings.Addressing.UseCompositionStrategy<FlatCompositionStrategy>()
+        //        topologySettings.Addressing().Individualization().UseStrategy<CoreIndividualizationStrategy>(); // same as composition
         //        topologySettings.Addressing().Sanitization().UseStrategy<ThrowOnFailingSanitizationStrategy>();
-
         //        topologySettings.Addressing().Validation().UseStrategy<EntityNameValidationRules>();
         //        topologySettings.Addressing().Validation().UseQueuePathMaximumLength(200); //shouldn't these be on resources instead?
         //        topologySettings.Addressing().Validation().UseTopicPathMaximumLength(200); //shouldn't these be on resources instead?
         //        topologySettings.Addressing().Validation().UseSubscriptionPathMaximumLength(50); //shouldn't these be on resources instead?
+        //        topologySettings.Addressing().UseNamespaceNamesInsteadOfConnectionStrings();
 
         //        topologySettings.Resources().Queues().AutoDeleteOnIdle(TimeSpan.FromDays(10); // change to properties topologySettings.Resources.Queues.AutoDeleteOnIdle =  true
         //        topologySettings.Resources().Queues().DescriptionFactory((path, settings) => new QueueDescription(path)); //Change to SetDescriptionFactory
